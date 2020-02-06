@@ -9,9 +9,13 @@ Password & Username (in files)\\
 
 ## Installation:
 
+Connecting to gcloud proxy: `./cloud_sql_proxy -instances=cs348-m0:us-east1:cs348-m0=tcp:3306`
+
 Creating python virtual env and installing dependencies:
-`python3 -m venv venv`
-`source venv/bin/activate`
-`pip install pymysql`
+```
+python3 -m venv venv
+source venv/bin/activate
+pip install pymysql
+```
 
 Run `python connect_db.py`
