@@ -1,9 +1,12 @@
 import pymysql
-connection = pymysql.connect(host='127.0.0.1', user='root', password='passw0rd', db='cs348m0')
+connection = pymysql.connect(host='127.0.0.1',
+                             user='root',
+                             password='passw0rd',
+                             db='cs348m0')
+with connection:
 
-mycursor = connection.cursor()
+    cur = connection.cursor()
+    cur.execute("select * from test")
+    result = cur.fetchall()
 
-mycursor.execute("SELECT * FROM test")
-result = mycursor.fetchall()
-
-print(result)
+    print(result)
