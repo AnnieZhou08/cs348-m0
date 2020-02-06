@@ -6,7 +6,13 @@ connection = pymysql.connect(host='127.0.0.1',
 with connection:
 
     cur = connection.cursor()
+
     cur.execute("select * from Reviews")
+    result = cur.fetchall()
+    for i in result:
+        print(i)
+
+    cur.execute("select * from ListingBookmark")
     result = cur.fetchall()
     for i in result:
         print(i)
