@@ -1,0 +1,6 @@
+(1, 1, datetime.date(2020, 1, 1), None, 'great place')
+(2, 2, datetime.date(2020, 2, 1), None, 'great place')
+(3, 3, datetime.date(2020, 2, 1), None, 'cs348 is great')
+(1, 4, datetime.date(2020, 1, 1), 1, 'great place')
+(2, 5, datetime.date(2020, 2, 1), 2, 'great place')
+(3, 6, datetime.date(2020, 2, 1), 3, 'cs348 is great')

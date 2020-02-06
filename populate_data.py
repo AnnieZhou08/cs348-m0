@@ -6,7 +6,7 @@ connection = pymysql.connect(host='127.0.0.1',
 with connection:
 
     # create table
-    with open('./create_table.sql', 'r') as f:
+    with open('./populate_data.sql', 'r') as f:
         query = f.read()
 
     cur = connection.cursor()
