@@ -1,4 +1,5 @@
 # Project Notes:
+https://docs.google.com/document/d/18UoZRqqRJuz9mnCOFF3fqb01W9S3DmcHsO4SSOTFv_s/edit?usp=sharing
 
 ## Cloud SQL Info:
 Project Name: CS348-M0 \\
