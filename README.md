@@ -19,4 +19,14 @@ source venv/bin/activate
 pip install pymysql
 ```
 
+## To connect to DB
 Run `python connect_db.py`
+
+## To Create Schema
+Run `python create_table.py`
+
+## To Populate (Test) Data
+Run `python populate_data.py`
+
+## To Query Reviews
+Run `python show_all_reviews.py`
