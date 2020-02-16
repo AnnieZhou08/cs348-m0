@@ -9,6 +9,8 @@ drop_reviews = "DROP TABLE IF EXISTS Reviews"
 
 drop_listing_bookmark = "DROP TABLE IF EXISTS ListingBookmark"
 
+drop_host = "DROP TABLE IF EXISTS Host"
+
 create_reviews = """
 CREATE TABLE IF NOT EXISTS Reviews (
 listing_id INT,
@@ -30,11 +32,29 @@ user_id INT,
 PRIMARY KEY (bookmark_id)
 )"""
 
+create_host = """
+CREATE TABLE IF NOT EXISTS Host (
+host_id INT NOT NULL,
+host_name VARCHAR(50),
+host_since VARCHAR(25),
+host_location VARCHAR(100),
+host_about VARCHAR(1000),
+host_response_time VARCHAR(50),
+host_response_rate INT,
+host_is_super_host BOOLEAN,
+host_total_listings_count INT,
+host_neighbourhood VARCHAR(100),
+host_identity_verified BOOLEAN,
+
+PRIMARY KEY (host_id)
+)
+"""
+
 queries = [
-    drop_reviews,
-    drop_listing_bookmark,
     create_reviews,
-    create_listing_bookmark
+    create_listing_bookmark,
+    drop_host,
+    create_host
 ]
 
 with connection:
