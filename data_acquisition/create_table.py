@@ -13,8 +13,9 @@ create_reviews = """
 CREATE TABLE IF NOT EXISTS Reviews (
 listing_id INT,
 id INT NOT NULL,
-date DATE,
+date VARCHAR(50),
 reviewer_id INT,
+reviewer_name VARCHAR(50),
 comments VARCHAR(1000),
 
 PRIMARY KEY (id)
