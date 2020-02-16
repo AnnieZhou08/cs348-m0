@@ -24,6 +24,7 @@ pip install pymysql
 
 ## To Create Schema
 Run `python create_table.py`
+Note: this will drop existing table and recreate everything
 
 ## To Populate Data
 Run `python populate_review.py` - for reviews
