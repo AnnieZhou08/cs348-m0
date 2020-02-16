@@ -8,6 +8,9 @@ Instance ID: cs348-m0 \\
 Instance Connection Name: cs348-m0:us-east1:cs348-m0 \\
 Password & Username (in files)\\
 
+## Dataset:
+https://drive.google.com/drive/folders/1b-s7NWunUw1YoOXv0igcUeEi29XTBYpz?usp=sharing
+
 ## Installation:
 
 Connecting to gcloud proxy: `./cloud_sql_proxy -instances=cs348-m0:us-east1:cs348-m0=tcp:3306`
@@ -19,14 +22,11 @@ source venv/bin/activate
 pip install pymysql
 ```
 
-## To connect to DB
-Run `python connect_db.py`
-
 ## To Create Schema
 Run `python create_table.py`
 
-## To Populate (Test) Data
-Run `python populate_data.py`
+## To Populate Data
+Run `python populate_review.py` - for reviews
 
 ## To Query Reviews
 Run `python show_all_reviews.py`
