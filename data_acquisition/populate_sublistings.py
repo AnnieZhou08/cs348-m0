@@ -24,10 +24,13 @@ with open('../dataset/listings.csv', newline='') as csvfile:
 		if(counter > 10000): break
 		listing_id = int(row['id'])
 		room_type = '"%s"'%row['room_type']
-		if room_type == 'Entire home/apt':
+		if room_type == '"Entire home/apt"':
 			formatted = query1%(listing_id)
-		else:
+		elif room_type == '"Private room"':
 			formatted = query2%(listing_id)
+		else:
+			print("WTF")
+			continue
 		print(formatted)
 		counter += 1
 		with connection:

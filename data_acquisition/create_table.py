@@ -13,6 +13,10 @@ drop_host = "DROP TABLE IF EXISTS Host"
 
 drop_listing = "DROP TABLE IF EXISTS Listing"
 
+drop_privateroom_listing = "DROP TABLE IF EXISTS PrivateRoomListing"
+
+drop_entirehome_listing = "DROP TABLE IF EXISTS EntireHomeListing"
+
 create_reviews = """
 CREATE TABLE IF NOT EXISTS Reviews (
 listing_id INT,
@@ -106,8 +110,9 @@ queries = [
     create_reviews,
     create_listing_bookmark,
     create_host,
-    drop_listing,
     create_listing,
+    drop_entirehome_listing,
+    drop_privateroom_listing,
     create_entirehome_listing,
     create_privateroom_listing
 ]
