@@ -26,6 +26,8 @@ Start server:
 Event Listener (code pointer):
 See example in `cs348-m0/slack/events/views.py` for `app_mention` request and `api_call`
 
+Note that the `SLACK_BOT_USER_TOKEN` in `settings.py` is incorrect. To get the correct token, go to the `Install App` page and replace that field
+
 Refer to tutorial: https://medium.com/freehunch/how-to-build-a-slack-bot-with-python-using-slack-events-api-django-under-20-minute-code-included-269c3a9bf64e
 
 ## Installation:
