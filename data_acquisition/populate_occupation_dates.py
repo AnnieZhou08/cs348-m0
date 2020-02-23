@@ -7,37 +7,26 @@ connection = pymysql.connect(host='127.0.0.1',
 			     db='cs348m0')
 
 query = """
-INSERT INTO Reviews(listing_id, date, id, reviewer_id, reviewer_name, comments) VALUES 
-	(%d, %s, %d, %d, %s, %s)
+INSERT INTO OccupationDates(listing_id, date, available, price, adjusted_price) VALUES 
+	(%d, %s, %r, %d, %d)
 ; 
 """
 
-with open('../dataset/clean_sf_reviews.csv', newline='') as csvfile:
+with open('../dataset/calendar.csv', newline='') as csvfile:
 	reader = csv.DictReader(csvfile)
 	counter = 0
 	for row in reader:
 		if(counter > 100000): break
 		listing_id = int(row['listing_id'])
 		date = '"%s"'%(row['date'].replace('/', '-'))
-		review_id = int(row['id'])
-		reviewer_id = int(row['reviewer_id'])
-		reviewer_name = '"%s"'%(row['reviewer_name'])
-		try:
-			reviewer_name.encode('ascii')
-		except UnicodeEncodeError:
-			continue
-		comments = '"%s"'%(row['comments'].replace('"', '\\"'))
-		try:
-			comments.encode('ascii')
-		except UnicodeEncodeError:
-			continue
-		if(len(comments) >= 1000 or len(comments) < 25): continue
+		available = False if row['available'] == 'f' else True  
+		price = int(row['price'].replace('$','').replace(',','').strip().split('.')[0])
+		adjusted_price = int(row['adjusted_price'].replace('$','').replace(',','').strip().split('.')[0])
 		formatted = query%(listing_id,
-					 date,
-					 review_id,
-					 reviewer_id,
-					 reviewer_name,
-					 comments)
+				   date,
+				   available,
+				   price,
+				   adjusted_price)
 		print(formatted)
 		counter += 1
 		with connection:
@@ -47,15 +36,15 @@ with open('../dataset/clean_sf_reviews.csv', newline='') as csvfile:
 			except pymysql.err.IntegrityError:
 				print("error executing query")
 				print(pymysql.err.IntegrityError)
-				continue	
+				continue
 			result = cur.fetchall()
 			print(result)
 
 	with connection:
 		cur = connection.cursor()
-		cur.execute("select * from Reviews")
+		cur.execute("select * from OccupationDates")
 		result = cur.fetchall()
-		print("Reviews")
+		print("Occupation Dates")
 		for i in result:
 			print(i)
 

@@ -17,6 +17,21 @@ drop_privateroom_listing = "DROP TABLE IF EXISTS PrivateRoomListing"
 
 drop_entirehome_listing = "DROP TABLE IF EXISTS EntireHomeListing"
 
+drop_occupation_dates = "DROP TABLE IF EXISTS OccupationDates"
+
+create_occupation_dates = """
+CREATE TABLE IF NOT EXISTS OccupationDates (
+listing_id INT,
+date VARCHAR(50),
+available BOOLEAN,
+price INT,
+adjusted_price INT,
+
+PRIMARY KEY (listing_id, date),
+FOREIGN KEY (listing_id) REFERENCES Listing(listing_id)
+)
+"""
+
 create_reviews = """
 CREATE TABLE IF NOT EXISTS Reviews (
 listing_id INT,
@@ -26,7 +41,8 @@ reviewer_id INT,
 reviewer_name VARCHAR(50),
 comments VARCHAR(1000),
 
-PRIMARY KEY (id)
+PRIMARY KEY (id),
+FOREIGN KEY (listing_id) REFERENCES Listing(listing_id)
 )"""
 
 create_listing_bookmark = """
@@ -35,7 +51,8 @@ bookmark_id INT NOT NULL AUTO_INCREMENT,
 listing_id INT,
 user_id INT,
 
-PRIMARY KEY (bookmark_id)
+PRIMARY KEY (bookmark_id),
+FOREIGN KEY (listing_id) REFERENCES Listing(listing_id)
 )"""
 
 create_host = """
@@ -107,14 +124,20 @@ FOREIGN KEY (listing_id) REFERENCES Listing(listing_id)
 """
 
 queries = [
-    create_reviews,
-    create_listing_bookmark,
-    create_host,
-    create_listing,
+    drop_occupation_dates,
+    drop_listing_bookmark,
+    drop_reviews,
     drop_entirehome_listing,
     drop_privateroom_listing,
+    drop_listing,
+    drop_host,
+    create_host,
+    create_listing,
+    create_privateroom_listing,
     create_entirehome_listing,
-    create_privateroom_listing
+    create_reviews,
+    create_occupation_dates,
+    create_listing_bookmark
 ]
 
 with connection:
