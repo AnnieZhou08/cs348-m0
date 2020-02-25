@@ -1,2 +1,5 @@
 venv/
 dataset/
+*.sqlite3
+__pycache__
+proxy_output
