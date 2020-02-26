@@ -7,16 +7,14 @@ connection = pymysql.connect(host='127.0.0.1',
 			     db='cs348m0')
 
 query = """
-INSERT INTO OccupationDates(listing_id, date, available, price, adjusted_price) VALUES 
+INSERT IGNORE INTO OccupationDates(listing_id, date, available, price, adjusted_price) VALUES 
 	(%d, %s, %r, %d, %d)
 ; 
 """
 
 with open('../dataset/calendar.csv', newline='') as csvfile:
 	reader = csv.DictReader(csvfile)
-	counter = 0
 	for row in reader:
-		if(counter > 100000): break
 		listing_id = int(row['listing_id'])
 		date = '"%s"'%(row['date'].replace('/', '-'))
 		available = False if row['available'] == 'f' else True  
@@ -28,14 +26,13 @@ with open('../dataset/calendar.csv', newline='') as csvfile:
 				   price,
 				   adjusted_price)
 		print(formatted)
-		counter += 1
 		with connection:
 			cur = connection.cursor()
 			try:
 				cur.execute(formatted)
-			except pymysql.err.IntegrityError:
+			except pymysql.err.IntegrityError as e:
 				print("error executing query")
-				print(pymysql.err.IntegrityError)
+				print(e)
 				continue
 			result = cur.fetchall()
 			print(result)
