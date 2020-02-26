@@ -15,6 +15,9 @@ Password & Username (in files)
 ## Dataset:
 https://drive.google.com/drive/folders/1b-s7NWunUw1YoOXv0igcUeEi29XTBYpz?usp=sharing
 
+## Slack Channel:
+https://cs348airbnb.slack.com/
+
 
 ## Slackbot:
 
@@ -38,8 +41,14 @@ Creating python virtual env and installing dependencies:
 ```
 python3 -m venv venv
 source venv/bin/activate
-pip install pymysql
+pip install -r requirements.txt
 ```
+
+## Interactive mysql shell
+After connecting to the gcp proxy
+
+`mysql -h localhost --port=3306 --protocol=tcp --user=[USERNAME] --password=[PASSWORD]`
+
 
 ## To Create Schema
 Run `python create_table.py`
