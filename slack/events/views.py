@@ -43,9 +43,9 @@ class Events(APIView):
             
             if event_message.get('type') == 'app_mention':
                 channel = event_message.get('channel')
-                all_neighbourhoods = get_listings(connection, "Noe Valley")
+                price = pn.get_neighborhood_price("")
                 Client.chat_postMessage(channel=channel,
-                                   text=all_neighbourhoods)
+                                   text=price)
                 return Response(status=status.HTTP_200_OK)
 
 
