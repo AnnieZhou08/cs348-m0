@@ -41,7 +41,10 @@ Creating python virtual env and installing dependencies:
 ```
 python3 -m venv venv
 source venv/bin/activate
-pip install -r requirements.txt
+pip install django
+pip install djangorestframework
+pip install slackclient
+pip install slackeventsapi
 ```
 
 ## Interactive mysql shell
