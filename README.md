@@ -41,7 +41,7 @@ Creating python virtual env and installing dependencies:
 ```
 python3 -m venv venv
 source venv/bin/activate
-pip install -r requirements.txt
+pip install Django
 ```
 
 ## Interactive mysql shell
