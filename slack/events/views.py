@@ -1,5 +1,6 @@
 from django.shortcuts import render
 import json
+import queries.list_neighborhoods as ln
 
 # Create your views here.
 from rest_framework.views import APIView
@@ -36,7 +37,7 @@ class Events(APIView):
                 channel = event_message.get('channel')
                 Client.api_call(method='chat.postMessage',
                                         channel=channel,
-                                        text="hello")
+                                        text=ln.get_neighborhoods())
                 return Response(status=status.HTTP_200_OK)
 
 
