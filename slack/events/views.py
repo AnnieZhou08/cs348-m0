@@ -1,6 +1,7 @@
 from django.shortcuts import render
 import json
 import queries.list_neighborhoods as ln
+import queries.price_neighborhoods as pn
 
 # Create your views here.
 from rest_framework.views import APIView
