@@ -3,3 +3,4 @@ dataset/
 *.sqlite3
 *__pycache__*
 proxy_output
+*settings.py
