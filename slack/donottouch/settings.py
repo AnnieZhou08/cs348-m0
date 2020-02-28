@@ -51,7 +51,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'slack.urls'
+ROOT_URLCONF = 'donottouch.urls'
 
 TEMPLATES = [
     {
@@ -69,7 +69,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'slack.wsgi.application'
+WSGI_APPLICATION = 'donottouch.wsgi.application'
 
 
 # Database

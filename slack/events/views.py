@@ -7,12 +7,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.conf import settings
-from slackclient import SlackClient
+import slack
 
 SLACK_VERIFICATION_TOKEN = getattr(settings, 'SLACK_VERIFICATION_TOKEN', None)
 SLACK_BOT_USER_TOKEN = getattr(settings,                          #2
 'SLACK_BOT_USER_TOKEN', None)                                     #
-Client = SlackClient(SLACK_BOT_USER_TOKEN)                        #3
+Client = slack.WebClient(SLACK_BOT_USER_TOKEN)                        #3
 
 class Events(APIView):
     def post(self, request, *args, **kwargs):
