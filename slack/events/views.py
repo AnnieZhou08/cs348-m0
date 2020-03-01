@@ -1,5 +1,6 @@
 from django.shortcuts import render
 import json
+import logging
 import queries.list_neighborhoods as ln
 import queries.price_neighborhoods as pn
 
@@ -10,6 +11,9 @@ from rest_framework import status
 from django.conf import settings
 import slack
 from queries.get_listings import get_listings
+
+# Parsing
+from module.parser import Parser, ParserResponse, Commands
 
 import pymysql
 connection = pymysql.connect(host='127.0.0.1',
@@ -37,17 +41,97 @@ class Events(APIView):
         if 'event' in slack_message:
             event_message = slack_message.get('event')
             channel = event_message.get('channel')
-            
+            print('Event Message', event_message)
+
+
+            if 'bot_id' in event_message or 'bot_profile' in  event_message:
+                # Just return a response code if we see our own message
+                return Response(status = status.HTTP_200_OK)
+
+            # ----------------------------------------------------
+            # What does this code do?
             if event_message.get('sub_type') == 'bot_message':
                 return Response(status=status.HTTP_200_OK)
-            
+
             if event_message.get('type') == 'app_mention':
                 channel = event_message.get('channel')
                 price = pn.get_neighborhood_price("")
-                Client.chat_postMessage(channel=channel,
-                                   text=price)
+                Client.chat_postMessage(channel=channel, text=price)
                 return Response(status=status.HTTP_200_OK)
+            # ----------------------------------------------------
+
+            try:
+                parse_result = Parser.parse(event_message)
+                command = parse_result.command
+                commandArgs = parse_result.commandArgs
+
+                # These are stubs, replace the "text=" part with calls to the
+                # actual queries
+                if command == Commands.Help:
+                    Client.chat_postMessage(
+                        channel = channel,
+                        text = (
+                            "Commands:\n"
+                            "`help` - Prints this!\n"
+                            "`list neighbourhood` - Returns a list of neighbourhoods\n"
+                            "`suggest host <neighbourhood=''>` - Returns suggested hosts\n"
+                            "Usage:\n"
+                            "- `suggest host`:\n"
+                            "- `suggest host neighbourhood='downtown'`:\n"
+                            "`suggest date <begin='' end=''>` - Returns suggested dates\n"
+                            "Usage:\n"
+                            "- `suggest date`:\n"
+                            "- `suggest date begin='2018-07-01' end='2018-08-01'`:\n"
+                            "`price date begin='' end=''` - Returns the average price within the date range\n"
+                            "Usage:\n"
+                            "- `price date begin='2018-07-01' end='2018-08-01'`:\n"
+                            "`price neighbourhood` - Returns the average price in different neighbourhoods\n"
+                            "`price homestyle` - Returns the average price for different homestyles\n"
+                        )
+                    )
+                elif command == Commands.ListNeighbourhood:
+                    Client.chat_postMessage(
+                        channel = channel,
+                        text = '{}, {}'.format(command, commandArgs)
+                    )
+                elif command == Commands.SuggestHost:
+                    Client.chat_postMessage(
+                        channel = channel,
+                        text = '{}, {}'.format(command, commandArgs)
+                    )
+                elif command == Commands.SuggestDate:
+                    Client.chat_postMessage(
+                        channel = channel,
+                        text = '{}, {}'.format(command, commandArgs)
+                    )
+                elif command == Commands.PriceDate:
+                    Client.chat_postMessage(
+                        channel = channel,
+                        text = '{}, {}'.format(command, commandArgs)
+                    )
+                elif command == Commands.PriceNeighbourHood:
+                    Client.chat_postMessage(
+                        channel = channel,
+                        text = '{}, {}'.format(command, commandArgs)
+                    )
+                elif command == Commands.PriceHomestyle:
+                    Client.chat_postMessage(
+                        channel = channel,
+                        text = '{}, {}'.format(command, commandArgs)
+                    )
+                else:
+                    logging.error('Invalid Command: {}\nSlack Message: {}'.format(command, slack_message))
+            except ValueError as e:
+                logging.error(e)
+                if channel is not None:
+                    Client.chat_postMessage(
+                        channel = channel,
+                        text = ":cry: Sorry, I don't understand that commmand. Perhaps try `help`?"
+                    )
+            except Exception as e:
+                logging.error(e)
+                logging.error('Parse failed on slack message: {}'.format(slack_message))
+
 
 
         return Response(status=status.HTTP_200_OK)
-
