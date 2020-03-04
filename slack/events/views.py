@@ -16,6 +16,7 @@ from queries.price_neighborhoods import get_neighborhood_price
 
 # Parsing
 from module.parser import Parser, ParserResponse, Commands
+from module.db_connection import Connection
 
 import pymysql
 connection = pymysql.connect(host='127.0.0.1',
@@ -31,6 +32,7 @@ Client = slack.WebClient(SLACK_BOT_USER_TOKEN)                        #3
 class Events(APIView):
     def post(self, request, *args, **kwargs):
         slack_message = request.data
+        conn = Connection.get_db_conn()
         if slack_message.get('token') != SLACK_VERIFICATION_TOKEN:
             return Response(status=status.HTTP_403_FORBIDDEN)
 
