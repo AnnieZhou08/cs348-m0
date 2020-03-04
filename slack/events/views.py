@@ -1,8 +1,6 @@
 from django.shortcuts import render
 import json
 import logging
-import queries.list_neighborhoods as ln
-import queries.price_neighborhoods as pn
 
 # Create your views here.
 from rest_framework.views import APIView
@@ -10,7 +8,11 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.conf import settings
 import slack
+
+# Queries
 from queries.get_listings import get_listings
+from queries.list_neighborhoods import get_neighborhoods
+from queries.price_neighborhoods import get_neighborhood_price
 
 # Parsing
 from module.parser import Parser, ParserResponse, Commands
@@ -92,7 +94,7 @@ class Events(APIView):
                 elif command == Commands.ListNeighbourhood:
                     Client.chat_postMessage(
                         channel = channel,
-                        text = '{}, {}'.format(command, commandArgs)
+                        text = get_neighborhoods()
                     )
                 elif command == Commands.SuggestHost:
                     Client.chat_postMessage(
@@ -112,7 +114,7 @@ class Events(APIView):
                 elif command == Commands.PriceNeighbourHood:
                     Client.chat_postMessage(
                         channel = channel,
-                        text = '{}, {}'.format(command, commandArgs)
+                        text = get_neighborhood_price('')
                     )
                 elif command == Commands.PriceHomestyle:
                     Client.chat_postMessage(
