@@ -36,8 +36,7 @@ class Events(APIView):
 
 	# verification challenge
         if slack_message.get('type') == 'url_verification':
-            return Response(data=slack_message,
-                            status=status.HTTP_200_OK)
+            return Response(data=slack_message, status=status.HTTP_200_OK)
 
 	# greet bot
         if 'event' in slack_message:
@@ -52,14 +51,14 @@ class Events(APIView):
 
             # ----------------------------------------------------
             # What does this code do?
-            if event_message.get('sub_type') == 'bot_message':
-                return Response(status=status.HTTP_200_OK)
-
-            if event_message.get('type') == 'app_mention':
-                channel = event_message.get('channel')
-                price = pn.get_neighborhood_price("")
-                Client.chat_postMessage(channel=channel, text=price)
-                return Response(status=status.HTTP_200_OK)
+            # if event_message.get('sub_type') == 'bot_message':
+            #     return Response(status=status.HTTP_200_OK)
+            #
+            # if event_message.get('type') == 'app_mention':
+            #     channel = event_message.get('channel')
+            #     price = get_neighborhood_price("")
+            #     Client.chat_postMessage(channel=channel, text=price)
+            #     return Response(status=status.HTTP_200_OK)
             # ----------------------------------------------------
 
             try:
@@ -75,20 +74,24 @@ class Events(APIView):
                         text = (
                             "Commands:\n"
                             "`help` - Prints this!\n"
-                            "`list neighbourhood` - Returns a list of neighbourhoods\n"
-                            "`suggest host <neighbourhood=''>` - Returns suggested hosts\n"
+                            "\n`list neighbourhood` - Returns a list of neighbourhoods\n"
+                            "\n`suggest host <neighbourhood=''>` - Returns suggested hosts\n"
                             "Usage:\n"
                             "- `suggest host`:\n"
                             "- `suggest host neighbourhood='downtown'`:\n"
-                            "`suggest date <begin='' end=''>` - Returns suggested dates\n"
+                            "\n`suggest date <begin='' end=''>` - Returns suggested dates\n"
                             "Usage:\n"
                             "- `suggest date`:\n"
                             "- `suggest date begin='2018-07-01' end='2018-08-01'`:\n"
-                            "`price date begin='' end=''` - Returns the average price within the date range\n"
+                            "\n`price date begin='' end='' <neighbourhood=''>` - Returns the average price within the date range (and optionally for one neighbourhood)\n"
                             "Usage:\n"
                             "- `price date begin='2018-07-01' end='2018-08-01'`:\n"
-                            "`price neighbourhood` - Returns the average price in different neighbourhoods\n"
-                            "`price homestyle` - Returns the average price for different homestyles\n"
+                            "- `price date begin='2018-07-01' end='2018-08-01' neighbourhood='downtown'`:\n"
+                            "\n`price neighbourhood <neighbourhood>` - Returns the average price in different neighbourhoods (or optionally, from one neighbourhood)\n"
+                            "Usage:\n"
+                            "- `price neighbourhood`"
+                            "- `price neighbourhood 'downtown'`\n"
+                            "\n`price homestyle` - Returns the average price for different homestyles\n"
                         )
                     )
                 elif command == Commands.ListNeighbourhood:
@@ -112,9 +115,10 @@ class Events(APIView):
                         text = '{}, {}'.format(command, commandArgs)
                     )
                 elif command == Commands.PriceNeighbourHood:
+                    neighbourhood = commandArgs['neighbourhood'] if (commandArgs is not None and 'neighbourhood' in commandArgs) else ''
                     Client.chat_postMessage(
                         channel = channel,
-                        text = get_neighborhood_price('')
+                        text = get_neighborhood_price(neighbourhood)
                     )
                 elif command == Commands.PriceHomestyle:
                     Client.chat_postMessage(
