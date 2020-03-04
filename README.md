@@ -45,6 +45,7 @@ pip install django
 pip install djangorestframework
 pip install slackclient
 pip install slackeventsapi
+pip install pymysql
 ```
 
 ## Interactive mysql shell
