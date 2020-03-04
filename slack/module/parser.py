@@ -63,9 +63,16 @@ class Parser:
             mCommand = ' '.join(messageWords[0:2])
             command = Commands(mCommand) # This may raise an exception
 
-            if command in [Commands.ListNeighbourhood, Commands.PriceNeighbourHood, Commands.PriceHomestyle]:
+            if command in [Commands.ListNeighbourhood, Commands.PriceHomestyle]:
                 # These 3 commands don't take arguments, just return
                 return ParserResponse(command = command)
+            elif command == Commands.PriceNeighbourHood:
+                match = re.match(r"(.*)price neighbourhood '(?P<neighbourhood>.*)'", message)
+                if match is None:
+                    return ParserResponse(command = command)
+                else:
+                    neighbourhood = match.group('neighbourhood')
+                    return ParserResponse(command = command, commandArgs = { 'neighbourhood': neighbourhood })
             elif command == Commands.SuggestHost:
                 match = re.match(r"(.*) neighbourhood='(?P<neighbourhood>.*)'(.*)", message)
                 if match is None:
@@ -84,14 +91,21 @@ class Parser:
                     end = match.group('end')
                     return ParserResponse(command = command, commandArgs = { 'begin': begin, 'end': end })
             elif command == Commands.PriceDate:
-                match = re.match(r"(.*) begin='(?P<begin>\d\d\d\d-\d\d-\d\d)' end='(?P<end>\d\d\d\d-\d\d-\d\d)'(.*)", message)
+                match = re.match(r"(.*) begin='(?P<begin>\d\d\d\d-\d\d-\d\d)' end='(?P<end>\d\d\d\d-\d\d-\d\d)' neighbourhood='(?P<neighbourhood>.*)'(.*)", message)
                 if match is None:
-                    # Command takes mandatory arugments
-                    raise ValueError()
+                    match = re.match(r"(.*) begin='(?P<begin>\d\d\d\d-\d\d-\d\d)' end='(?P<end>\d\d\d\d-\d\d-\d\d)' (.*)", message)
+                    if match is None:
+                        # Command takes mandatory arugments
+                        raise ValueError()
+                    else:
+                        begin = match.group('begin')
+                        end = match.group('end')
+                        return ParserResponse(command = command, commandArgs = { 'begin': begin, 'end': end })
                 else:
                     begin = match.group('begin')
                     end = match.group('end')
-                    return ParserResponse(command = command, commandArgs = { 'begin': begin, 'end': end })
+                    neighbourhood = match.group('neighbourhood')
+                    return ParserResponse(command = command, commandArgs = { 'begin': begin, 'end': end, 'neighbourhood': neighbourhood })
             else:
                 raise Exception()
 
