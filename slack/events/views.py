@@ -13,6 +13,7 @@ import slack
 from queries.get_listings import get_listings
 from queries.list_neighborhoods import get_neighborhoods
 from queries.price_neighborhoods import get_neighborhood_price
+from queries.avg_price import avg_price
 
 # Parsing
 from module.parser import Parser, ParserResponse, Commands
@@ -112,9 +113,13 @@ class Events(APIView):
                         text = '{}, {}'.format(command, commandArgs)
                     )
                 elif command == Commands.PriceDate:
+                    neighbourhood = commandArgs['neighbourhood'] if (commandArgs is not None and 'neighbourhood' in commandArgs) else ''
                     Client.chat_postMessage(
                         channel = channel,
-                        text = '{}, {}'.format(command, commandArgs)
+                        text = avg_price(connection, 
+                                         neighbourhood,
+                                         commandArgs['begin'],
+                                         commandArgs['end'])
                     )
                 elif command == Commands.PriceNeighbourHood:
                     neighbourhood = commandArgs['neighbourhood'] if (commandArgs is not None and 'neighbourhood' in commandArgs) else ''
