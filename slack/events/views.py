@@ -14,7 +14,7 @@ from queries.get_listings import get_listings
 from queries.list_neighborhoods import get_neighborhoods
 from queries.price_neighborhoods import get_neighborhood_price
 from queries.avg_price import avg_price, avg_price_per_style
-from queries.sugest_hosts import suggest_hosts
+from queries.suggest_hosts import suggest_hosts
 
 # Parsing
 from module.parser import Parser, ParserResponse, Commands

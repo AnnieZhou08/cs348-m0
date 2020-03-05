@@ -75,9 +75,9 @@ class Parser:
                     return ParserResponse(command = command, commandArgs = { 'neighbourhood': neighbourhood })
             elif command == Commands.SuggestHost:
                 neighbourhood = re.match(r"(.*)neighbourhood='(?P<neighbourhood>.*)'(.*)", message)
-                numberOf = re.match(r"(.*)numberOf='(?P<numberOf>\d+)'(.*)", message)
+                numberOf = re.match(r"(.*)numberOf=(?P<numberOf>\d+)(.*)", message)
                 neighbourhood = neighbourhood.group('neighbourhood') if neighbourhood is not None else None
-                numberOf = numberOf.group('numberOf') if numberOf is not None else None
+                numberOf = int(numberOf.group('numberOf')) if numberOf is not None else None
 
                 return ParserResponse(command = command, commandArgs = { 'neighbourhood': neighbourhood, 'numberOf': numberOf })
             elif command == Commands.SuggestDate:
