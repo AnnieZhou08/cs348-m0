@@ -74,13 +74,12 @@ class Parser:
                     neighbourhood = match.group('neighbourhood')
                     return ParserResponse(command = command, commandArgs = { 'neighbourhood': neighbourhood })
             elif command == Commands.SuggestHost:
-                match = re.match(r"(.*) neighbourhood='(?P<neighbourhood>.*)'(.*)", message)
-                if match is None:
-                    # match failed or no optional arguments were given
-                    return ParserResponse(command = command)
-                else:
-                    neighbourhood = match.group('neighbourhood')
-                    return ParserResponse(command = command, commandArgs = { 'neighbourhood': neighbourhood })
+                neighbourhood = re.match(r"(.*)neighbourhood='(?P<neighbourhood>.*)'(.*)", message)
+                numberOf = re.match(r"(.*)numberOf=(?P<numberOf>\d+)(.*)", message)
+                neighbourhood = neighbourhood.group('neighbourhood') if neighbourhood is not None else None
+                numberOf = int(numberOf.group('numberOf')) if numberOf is not None else None
+
+                return ParserResponse(command = command, commandArgs = { 'neighbourhood': neighbourhood, 'numberOf': numberOf })
             elif command == Commands.SuggestDate:
                 match = re.match(r"(.*) begin='(?P<begin>\d\d\d\d-\d\d-\d\d)' end='(?P<end>\d\d\d\d-\d\d-\d\d)'(.*)", message)
                 if match is None:

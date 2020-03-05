@@ -40,8 +40,8 @@ def suggest_hosts(nbrhd=None, topn=None):
                 FROM Reviews JOIN Listing ON Reviews.listing_id = Listing.listing_id
                 JOIN Host ON Host.host_id = Listing.host_id
               	WHERE Host.host_is_super_host = TRUE
-		AND Host.host_location = nbrhd
-                """
+		AND Listing.neighbourhood = '{}'
+                """.format(nbrhd)
 
 	output = '*Suggested Hosts and their Average Score[?]:* \n'
 	host_map = {}
@@ -65,14 +65,11 @@ def suggest_hosts(nbrhd=None, topn=None):
 	if topn is None:
 		topn = 10
 
+	topn = min(topn, len(host_map))
 	for x in range(topn):
 		next_host = q.get()
 		line = '{}, {}\n'.format(next_host.name, (next_host.sentiment/next_host.numReviews))
 		output += line
 	
 	output += '[?]scores are computed based on the average level of positivity in sentiment analysis of all reviews of listings by this host.'
-	print(output)	
 	return output
-
-suggest_hosts()
-
