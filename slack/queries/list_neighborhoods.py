@@ -1,5 +1,5 @@
 import pymysql
-	
+
 def get_neighborhoods():
 	connection = pymysql.connect(host='127.0.0.1',
 				     user='root',
@@ -15,10 +15,9 @@ def get_neighborhoods():
 			currNbrhd = nbrhd[0].strip()
 			if(currNbrhd is None or len(currNbrhd) == 0): continue
 			res += currNbrhd + '\n'
-		
+
 		print(res)
-	
+
 	return res
 
-get_neighborhoods()
-
+# get_neighborhoods()

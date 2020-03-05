@@ -1,5 +1,5 @@
 import pymysql
-	
+
 def get_neighborhood_price(nbrhd):
 	connection = pymysql.connect(host='127.0.0.1',
 				     user='root',
@@ -28,10 +28,9 @@ def get_neighborhood_price(nbrhd):
 		for info in result:
 			if info[0] is None or len(info[0].strip()) == 0: continue
 			res += info[0] + ', $' + str(info[1])[:-2] + '\n'
-			
+
 		print(res)
-	
+
 	return res
 
-get_neighborhood_price("Civic Center")
-
+# get_neighborhood_price("Civic Center")
