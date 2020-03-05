@@ -23,3 +23,22 @@ def avg_price(conn, neighbourhood, date0, date1):
             val += '\n'
 
     return "No price data" if val == '' else val
+
+def avg_price_per_style(conn):
+    query = """
+    SELECT Listing.room_type, 
+           AVG(Listing.price)
+    FROM Listing
+    GROUP BY Listing.room_type ;
+    """
+
+    cur = conn.cursor()
+    cur.execute(query)
+    result = cur.fetchall()
+
+    val = ''
+    for room_type, avg_price in result:
+        val += "Average price across all dates for {} is {}".format(room_type, avg_price)
+        val += '\n'
+
+    return "No price data" if val == '' else val

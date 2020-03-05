@@ -13,7 +13,7 @@ import slack
 from queries.get_listings import get_listings
 from queries.list_neighborhoods import get_neighborhoods
 from queries.price_neighborhoods import get_neighborhood_price
-from queries.avg_price import avg_price
+from queries.avg_price import avg_price, avg_price_per_style
 
 # Parsing
 from module.parser import Parser, ParserResponse, Commands
@@ -130,7 +130,7 @@ class Events(APIView):
                 elif command == Commands.PriceHomestyle:
                     Client.chat_postMessage(
                         channel = channel,
-                        text = '{}, {}'.format(command, commandArgs)
+                        text = avg_price_per_style(connection)
                     )
                 else:
                     logging.error('Invalid Command: {}\nSlack Message: {}'.format(command, slack_message))
