@@ -14,6 +14,7 @@ from queries.get_listings import get_listings
 from queries.list_neighborhoods import get_neighborhoods
 from queries.price_neighborhoods import get_neighborhood_price
 from queries.avg_price import avg_price, avg_price_per_style
+from queries.suggest_hosts import suggest_hosts
 
 # Parsing
 from module.parser import Parser, ParserResponse, Commands
@@ -78,10 +79,12 @@ class Events(APIView):
                             "Commands:\n"
                             "`help` - Prints this!\n"
                             "\n`list neighbourhood` - Returns a list of neighbourhoods\n"
-                            "\n`suggest host <neighbourhood=''>` - Returns suggested hosts\n"
+                            "\n`suggest host <neighbourhood=''> <numberOf=''>` - Returns suggested hosts (and optionally within a neighbourhood or the top N)\n"
                             "Usage:\n"
                             "- `suggest host`:\n"
                             "- `suggest host neighbourhood='downtown'`:\n"
+                            "- `suggest host numberOf=5`:\n"
+                            "- `suggest host neighbourhood='downtown' numberOf=5`:\n"
                             "\n`suggest date <begin='' end=''>` - Returns suggested dates\n"
                             "Usage:\n"
                             "- `suggest date`:\n"
@@ -105,7 +108,7 @@ class Events(APIView):
                 elif command == Commands.SuggestHost:
                     Client.chat_postMessage(
                         channel = channel,
-                        text = '{}, {}'.format(command, commandArgs)
+                        text = suggest_hosts(commandArgs['neighbourhood'], commandArgs['numberOf'])
                     )
                 elif command == Commands.SuggestDate:
                     Client.chat_postMessage(
@@ -116,7 +119,7 @@ class Events(APIView):
                     neighbourhood = commandArgs['neighbourhood'] if (commandArgs is not None and 'neighbourhood' in commandArgs) else ''
                     Client.chat_postMessage(
                         channel = channel,
-                        text = avg_price(connection, 
+                        text = avg_price(connection,
                                          neighbourhood,
                                          commandArgs['begin'],
                                          commandArgs['end'])
