@@ -93,7 +93,7 @@ class Parser:
             elif command == Commands.PriceDate:
                 match = re.match(r"(.*) begin='(?P<begin>\d\d\d\d-\d\d-\d\d)' end='(?P<end>\d\d\d\d-\d\d-\d\d)' neighbourhood='(?P<neighbourhood>.*)'(.*)", message)
                 if match is None:
-                    match = re.match(r"(.*) begin='(?P<begin>\d\d\d\d-\d\d-\d\d)' end='(?P<end>\d\d\d\d-\d\d-\d\d)' (.*)", message)
+                    match = re.match(r"(.*) begin='(?P<begin>\d\d\d\d-\d\d-\d\d)' end='(?P<end>\d\d\d\d-\d\d-\d\d)'(.*)", message)
                     if match is None:
                         # Command takes mandatory arugments
                         raise ValueError()
