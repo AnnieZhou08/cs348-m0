@@ -35,17 +35,17 @@ https://cs348airbnb.slack.com/
 
 ## Features implemented:
 ### User Interface
-Users have multiple commands, a list is available if they type “help” to the bot. Our commands include the following:
+Users have multiple commands, a list is available if they type “help” to the bot. Our commands/features include the following:
 
 `help`
-Prints help document
+Prints help document. File: `/slack/events/views.py`
 
 
 `list neighborhood`
-Returns a list of neighborhoods
+Returns a list of neighborhoods. File: `/slack/queries/list_neighborhoods.py`
 
 `suggest host <neighbourhood=''> <numberOf=''>`
-Returns suggested hosts (and optionally within a neighbourhood or the top N).
+Returns suggested hosts (and optionally within a neighbourhood or the top N). File: `/slack/queries/suggest_hosts.py`
 Usage:
 
       `suggest host`
@@ -54,23 +54,15 @@ Usage:
       `suggest host neighbourhood='downtown' numberOf=5`
 
 
-`suggest date <begin='' end=''>`
-Returns suggested dates.
-Usage: 
-
-      `suggest date`
-      `suggest date begin='2018-07-01' end='2018-08-01'`
-
-
 `price date begin=' ' end=' ' <neighbourhood=''>`
-Returns the average price within the date range (and optionally for one neighbourhood).
+Returns the average price within the date range (and optionally for one neighbourhood). File: `/slack/queries/avg_price.py`
 Usage: 
       
       `price date begin='2018-07-01' end='2018-08-01' neighbourhood='downtown'`
 
 
 `price neighbourhood <neighbourhood>` 
-Returns the average price in different neighbourhoods (or optionally, from one neighbourhood).
+Returns the average price in different neighbourhoods (or optionally, from one neighbourhood). File: `/slack/queries/price_neighborhoods.py`
 Usage: 
 
       `price neighbourhood`   
@@ -78,7 +70,19 @@ Usage:
 
 
 `price homestyle`
-Returns the average price for different homestyles
+Returns the average price for different homestyles. File: `/slack/queries/avg_price.py`
+
+
+To implement all of these, we also needed to create a parser for user commands. File: `/slack/module/parser.py`
+
+## Features left:
+`suggest date <begin='' end=''>`
+Returns suggested dates.
+Usage: 
+
+      `suggest date`
+      `suggest date begin='2018-07-01' end='2018-08-01'`
+
 
 
 Refer to tutorial: https://medium.com/freehunch/how-to-build-a-slack-bot-with-python-using-slack-events-api-django-under-20-minute-code-included-269c3a9bf64e
