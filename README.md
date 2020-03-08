@@ -1,65 +1,84 @@
-# Project Notes:
-https://docs.google.com/document/d/18UoZRqqRJuz9mnCOFF3fqb01W9S3DmcHsO4SSOTFv_s/edit?usp=sharing
+# CS 348 Project - Airbnb Slack Bot:
+## Set up and Installation:
+0. Download ngrok
 
-## Cloud SQL Info:
-Project Name: CS348-M0
+1. Open one terminal (t1) and connect to our database instance (all the data should be populated already in the cloud database instance. The population of the dataset is done in `/data_acquisition/`) on gcp by running:
+```
+./cloud_sql_proxy -instances=cs348-m0:us-east1:cs348-m0=tcp:3306
+```
 
-Project ID: cs348-m0
 
-Instance ID: cs348-m0
+2. Open another terminal (t2), activate python virtual environment and install the needed dependencies:
+```
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
 
-Instance Connection Name: cs348-m0:us-east1:cs348-m0
 
-Password & Username (in files)
+3. Start our django server by running the following command in t2: 
+```
+python manage.py runserver 0.0.0.0:8000
+```
 
-## Dataset:
-https://drive.google.com/drive/folders/1b-s7NWunUw1YoOXv0igcUeEi29XTBYpz?usp=sharing
+4. Open another terminal (t3) and tunnel our localhost:8000 to a public address by using ngrok:
+```
+./ngrok http 8000
+```
+
+5. From our ngrok in step 4, we have gotten this public address. Use this public address as the endpoint to Events Subscription in slack (will need access to slack account).
+
+6. If the endpoint was verified, then we could start using this bot in our slack workspace (any channel that the slackbot is invited to).
 
 ## Slack Channel:
 https://cs348airbnb.slack.com/
 
+## Features implemented:
+### User Interface
+Users have multiple commands, a list is available if they type “help” to the bot. Our commands include the following:
 
-## Slackbot:
+`help`
+Prints help document
 
-Start server: 
-- In `cs348-m0/slack/` run `python manage.py runserver 0.0.0.0:8000`
-- In another terminal, run `ngrok http 8000`
-- In `Event Subscriptions` tab for Starter Bot features, replace Request URL with the new forwarded url from ngrok
 
-Event Listener (code pointer):
-See example in `cs348-m0/slack/events/views.py` for `app_mention` request and `api_call`
+`list neighborhood`
+Returns a list of neighborhoods
 
-Note that the `SLACK_BOT_USER_TOKEN` in `settings.py` is incorrect. To get the correct token, go to the `Install App` page and replace that field
+`suggest host <neighbourhood=''> <numberOf=''>`
+Returns suggested hosts (and optionally within a neighbourhood or the top N).
+Usage:
+
+      `suggest host`
+      `suggest host neighbourhood='downtown'`
+      `suggest host numberOf=5`
+      `suggest host neighbourhood='downtown' numberOf=5`
+
+
+`suggest date <begin='' end=''>`
+Returns suggested dates.
+Usage: 
+
+      `suggest date`
+      `suggest date begin='2018-07-01' end='2018-08-01'`
+
+
+`price date begin=' ' end=' ' <neighbourhood=''>`
+Returns the average price within the date range (and optionally for one neighbourhood).
+Usage: 
+      
+      `price date begin='2018-07-01' end='2018-08-01' neighbourhood='downtown'`
+
+
+`price neighbourhood <neighbourhood>` 
+Returns the average price in different neighbourhoods (or optionally, from one neighbourhood).
+Usage: 
+
+      `price neighbourhood`   
+      `price neighbourhood 'downtown'`
+
+
+`price homestyle`
+Returns the average price for different homestyles
+
 
 Refer to tutorial: https://medium.com/freehunch/how-to-build-a-slack-bot-with-python-using-slack-events-api-django-under-20-minute-code-included-269c3a9bf64e
-
-## Installation:
-
-Connecting to gcloud proxy: `./cloud_sql_proxy -instances=cs348-m0:us-east1:cs348-m0=tcp:3306`
-
-Creating python virtual env and installing dependencies:
-```
-python3 -m venv venv
-source venv/bin/activate
-pip install django
-pip install djangorestframework
-pip install slackclient
-pip install slackeventsapi
-pip install pymysql
-```
-
-## Interactive mysql shell
-After connecting to the gcp proxy
-
-`mysql -h localhost --port=3306 --protocol=tcp --user=[USERNAME] --password=[PASSWORD]`
-
-
-## To Create Schema
-Run `python create_table.py`
-Note: this will drop existing table and recreate everything
-
-## To Populate Data
-In `cs348-m0/data_acquisition`, run `python populate_review.py` - for reviews; and similarly for hosts, listings and sublistings
-
-## To Query Reviews
-In `cs348-m0/data_acquisition`, run `python show_all.py`
