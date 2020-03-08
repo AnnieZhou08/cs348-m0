@@ -47,6 +47,7 @@ Usage:
       `get listings neighbourhood='downtown'`
       `get listings numberOf=5`
       `get listings neighbourhood='downtown' numberOf=5`
+      
 ![](feature_screenshots/GetListings.png)
 
 `list neighborhood`
@@ -60,6 +61,7 @@ Usage:
       `suggest host neighbourhood='downtown'`
       `suggest host numberOf=5`
       `suggest host neighbourhood='downtown' numberOf=5`
+      
 ![](feature_screenshots/SuggestHosts.png)
 
 
@@ -77,7 +79,9 @@ Usage:
 
       `price neighbourhood`   
       `price neighbourhood 'downtown'`
+      
 ![](feature_screenshots/Price2.png)
+
 ![](feature_screenshots/Price1.png)
 
 
