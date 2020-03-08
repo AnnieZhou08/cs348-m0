@@ -13,6 +13,7 @@ class Commands(Enum):
     PriceDate = 'price date'
     PriceNeighbourHood = 'price neighbourhood'
     PriceHomestyle = 'price homestyle'
+    GetListings = 'get listings'
 
 class ParserResponse:
     """
@@ -25,6 +26,16 @@ class ParserResponse:
     def __init__(self, command, commandArgs = None):
         self.command = command
         self.commandArgs = commandArgs
+
+"""
+Returns the group given by argumentName in regexMatch if regexMatch exists
+
+Input:
+regexMatch          re.Match            Result of the regex
+argumentName        string              Name of the group we want from regexMatch
+"""
+def argumentOrNone(regexMatch, argumentName):
+    return regexMatch.group(argumentName) if regexMatch is not None else None
 
 class Parser:
     """
@@ -105,6 +116,28 @@ class Parser:
                     end = match.group('end')
                     neighbourhood = match.group('neighbourhood')
                     return ParserResponse(command = command, commandArgs = { 'begin': begin, 'end': end, 'neighbourhood': neighbourhood })
+            elif command == Commands.GetListings:
+                host = argumentOrNone(re.match(r"(.*)host='(?P<host>.*?)'(.*)", message), 'host')
+                neighbourhood = argumentOrNone(re.match(r"(.*)neighbourhood='(?P<neighbourhood>.*?)'(.*)", message), 'neighbourhood')
+
+                intOrNone = lambda x: int(x) if x is not None else None
+
+                numPeople = intOrNone(argumentOrNone(re.match(r"(.*)numPeople=(?P<numPeople>\d+)(.*)", message), 'numPeople'))
+                startPrice = intOrNone(argumentOrNone(re.match(r"(.*)startPrice=(?P<startPrice>\d+)(.*)", message), 'startPrice'))
+                endPrice = intOrNone(argumentOrNone(re.match(r"(.*)endPrice=(?P<endPrice>\d+)(.*)", message), 'endPrice'))
+                numResults = intOrNone(argumentOrNone(re.match(r"(.*)numResults=(?P<numResults>\d+)(.*)", message), 'numResults'))
+
+                return ParserResponse(
+                    command = command,
+                    commandArgs = {
+                        'host': host,
+                        'neighbourhood': neighbourhood,
+                        'numPeople': numPeople,
+                        'startPrice': startPrice,
+                        'endPrice': endPrice,
+                        'numResults': numResults
+                    }
+                )
             else:
                 raise Exception()
 

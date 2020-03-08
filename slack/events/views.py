@@ -49,7 +49,7 @@ class Events(APIView):
             print('Event Message', event_message)
 
 
-            if 'bot_id' in event_message or 'bot_profile' in  event_message:
+            if 'bot_id' in event_message or 'bot_profile' in event_message or 'subtype' in event_message:
                 # Just return a response code if we see our own message
                 return Response(status = status.HTTP_200_OK)
 
@@ -98,6 +98,9 @@ class Events(APIView):
                             "- `price neighbourhood`"
                             "- `price neighbourhood 'downtown'`\n"
                             "\n`price homestyle` - Returns the average price for different homestyles\n"
+                            "\n`get listings <neighbourhood, host, numPeople, startPrice, endPrice, numResults> ` - Returns listings (filtered by the optional parameters)\n"
+                            "Usage:\n"
+                            "- `get listings neighbourhood='downtown' numPeople=3 endPrice=10000 startPrice=10`"
                         )
                     )
                 elif command == Commands.ListNeighbourhood:
@@ -134,6 +137,18 @@ class Events(APIView):
                     Client.chat_postMessage(
                         channel = channel,
                         text = avg_price_per_style(connection)
+                    )
+                elif command == Commands.GetListings:
+                    Client.chat_postMessage(
+                        channel = channel,
+                        text = get_listings(
+                            host = commandArgs['host'],
+                            nbrhd = commandArgs['neighbourhood'],
+                            numPeople = commandArgs['numPeople'],
+                            startPrice = commandArgs['startPrice'],
+                            endPrice = commandArgs['endPrice'],
+                            numResults = commandArgs['numResults']
+                        )
                     )
                 else:
                     logging.error('Invalid Command: {}\nSlack Message: {}'.format(command, slack_message))
