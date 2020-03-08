@@ -40,6 +40,14 @@ Users have multiple commands, a list is available if they type “help” to the
 `help`
 Prints help document. File: `/slack/events/views.py`
 
+`get listings`
+Returns a list of listings. File: `/slack/queries/get_listings.py`
+Usage:
+      `get listings`
+      `get listings neighbourhood='downtown'`
+      `get listings numberOf=5`
+      `get listings neighbourhood='downtown' numberOf=5`
+![](feature_screenshots/GetListings.png)
 
 `list neighborhood`
 Returns a list of neighborhoods. File: `/slack/queries/list_neighborhoods.py`
