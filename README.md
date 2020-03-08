@@ -52,7 +52,7 @@ Usage:
       `suggest host neighbourhood='downtown'`
       `suggest host numberOf=5`
       `suggest host neighbourhood='downtown' numberOf=5`
-
+![](feature_screenshots/GetListings.png)
 
 `price date begin=' ' end=' ' <neighbourhood=''>`
 Returns the average price within the date range (and optionally for one neighbourhood). File: `/slack/queries/avg_price.py`
