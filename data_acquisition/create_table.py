@@ -49,10 +49,11 @@ create_listing_bookmark = """
 CREATE TABLE IF NOT EXISTS ListingBookmark (
 bookmark_id INT NOT NULL AUTO_INCREMENT,
 listing_id INT,
-user_id INT,
+slack_user_id VARCHAR(50),
 
 PRIMARY KEY (bookmark_id),
-FOREIGN KEY (listing_id) REFERENCES Listing(listing_id)
+FOREIGN KEY (listing_id) REFERENCES Listing(listing_id),
+UNIQUE KEY(slack_user_id, listing_id)
 )"""
 
 create_host = """
