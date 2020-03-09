@@ -15,6 +15,7 @@ from queries.list_neighborhoods import get_neighborhoods
 from queries.price_neighborhoods import get_neighborhood_price
 from queries.avg_price import avg_price, avg_price_per_style
 from queries.suggest_hosts import suggest_hosts
+from queries.bookmark import add_bookmark
 
 # Parsing
 from module.parser import Parser, ParserResponse, Commands
@@ -100,7 +101,9 @@ class Events(APIView):
                             "\n`price homestyle` - Returns the average price for different homestyles\n"
                             "\n`get listings <neighbourhood, host, numPeople, startPrice, endPrice, numResults> ` - Returns listings (filtered by the optional parameters)\n"
                             "Usage:\n"
-                            "- `get listings neighbourhood='downtown' numPeople=3 endPrice=10000 startPrice=10`"
+                            "- `get listings neighbourhood='downtown' numPeople=3 endPrice=10000 startPrice=10`\n"
+                            "Usage:\n"
+                            "- `add bookmark listingID=42`"
                         )
                     )
                 elif command == Commands.ListNeighbourhood:
@@ -148,6 +151,15 @@ class Events(APIView):
                             startPrice = commandArgs['startPrice'],
                             endPrice = commandArgs['endPrice'],
                             numResults = commandArgs['numResults']
+                        )
+                    )
+                elif command == Commands.AddBookmark:
+                    Client.chat_postMessage(
+                        channel = channel,
+                        text = add_bookmark(
+                            conn = connection,
+                            slack_user_id = commandArgs['slackUserID'],
+                            listing_id = commandArgs['listingID']
                         )
                     )
                 else:
