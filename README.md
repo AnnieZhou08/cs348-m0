@@ -16,7 +16,7 @@ pip install -r requirements.txt
 ```
 
 
-3. Start our django server by running the following command in t2: 
+3. Start our django server by running the following command in t2, in directory: cs348-m0/slack: 
 ```
 python manage.py runserver 0.0.0.0:8000
 ```
