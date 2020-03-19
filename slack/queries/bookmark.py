@@ -1,6 +1,6 @@
 import pymysql
 
-def add_bookmark(conn, slack_user_id, listing_id):
+def add_bookmark(conn, slack_user_id, listing_id, comments):
     if slack_user_id is None or len(slack_user_id) <= 0:
         return "Cannot add bookmark; Slack doesn't know your user id"
 
@@ -9,13 +9,22 @@ def add_bookmark(conn, slack_user_id, listing_id):
 
     query = """
     INSERT INTO `ListingBookmark`
-           (`listing_id`, `slack_user_id`)
-    VALUES (%s, %s);
+           (`listing_id`, `slack_user_id`, `comments`)
+    VALUES (%s, %s, %s);
+    """
+
+    if comments is None:
+	comments = ""
+
+    query_update = """
+    UPDATE ListingBookmark
+    SET comments = %s
+    WHERE slack_user_id = %s AND listing_id = %s;
     """
 
     try:
         with conn.cursor() as cur:
-            cur.execute(query, (listing_id, slack_user_id))
+            cur.execute(query, (listing_id, slack_user_id, comments))
         conn.commit()
         return "Bookmark added successfully"
     except pymysql.IntegrityError as e:
@@ -27,7 +36,9 @@ def add_bookmark(conn, slack_user_id, listing_id):
             return "Cannot add bookmark; this listing does not exist :("
         if 1062 == reason:
             # Message: Duplicate entry
-            return "You have already bookmarked this listing :)"
+	    cur.execute(query_update, (comments, slack_user_id, listing_id))
+	    conn.commit()
+            return "Updated the comment of listing {} to {}".format(listing_id, comments)
         return "Cannot add bookmark"
     except e:
         return "Cannot add bookmark"
