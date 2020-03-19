@@ -62,6 +62,7 @@ CREATE TABLE IF NOT EXISTS ListingBookmark (
 bookmark_id INT NOT NULL AUTO_INCREMENT,
 listing_id INT,
 slack_user_id VARCHAR(50),
+comments VARCHAR(1000),
 
 PRIMARY KEY (bookmark_id),
 FOREIGN KEY (listing_id) REFERENCES Listing(listing_id),
@@ -140,7 +141,7 @@ queries = [
     drop_popular_listing,
     create_popular_listing,
 #    drop_occupation_dates,
-#    drop_listing_bookmark,
+    drop_listing_bookmark,
 #    drop_reviews,
 #    drop_entirehome_listing,
 #    drop_privateroom_listing,
@@ -152,7 +153,7 @@ queries = [
 #    create_entirehome_listing,
 #    create_reviews,
 #    create_occupation_dates,
-#    create_listing_bookmark
+    create_listing_bookmark
 ]
 
 with connection:
