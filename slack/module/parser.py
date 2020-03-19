@@ -14,6 +14,7 @@ class Commands(Enum):
     PriceNeighbourHood = 'price neighbourhood'
     PriceHomestyle = 'price homestyle'
     GetListings = 'get listings'
+    AddBookmark = 'add bookmark'
 
 class ParserResponse:
     """
@@ -36,6 +37,9 @@ argumentName        string              Name of the group we want from regexMatc
 """
 def argumentOrNone(regexMatch, argumentName):
     return regexMatch.group(argumentName) if regexMatch is not None else None
+
+def intOrNone (x):
+    return int(x) if x is not None else None
 
 class Parser:
     """
@@ -120,8 +124,6 @@ class Parser:
                 host = argumentOrNone(re.match(r"(.*)host='(?P<host>.*?)'(.*)", message), 'host')
                 neighbourhood = argumentOrNone(re.match(r"(.*)neighbourhood='(?P<neighbourhood>.*?)'(.*)", message), 'neighbourhood')
 
-                intOrNone = lambda x: int(x) if x is not None else None
-
                 numPeople = intOrNone(argumentOrNone(re.match(r"(.*)numPeople=(?P<numPeople>\d+)(.*)", message), 'numPeople'))
                 startPrice = intOrNone(argumentOrNone(re.match(r"(.*)startPrice=(?P<startPrice>\d+)(.*)", message), 'startPrice'))
                 endPrice = intOrNone(argumentOrNone(re.match(r"(.*)endPrice=(?P<endPrice>\d+)(.*)", message), 'endPrice'))
@@ -136,6 +138,16 @@ class Parser:
                         'startPrice': startPrice,
                         'endPrice': endPrice,
                         'numResults': numResults
+                    }
+                )
+            elif command == Commands.AddBookmark:
+                slack_user_id = event_message.get('user', '')
+                listing_id = intOrNone(argumentOrNone(re.match(r"(.*)listingID=(?P<listingID>\d+)(.*)", message), 'listingID'))
+                return ParserResponse(
+                    command = command,
+                    commandArgs = {
+                        'slackUserID': slack_user_id,
+                        'listingID': listing_id,
                     }
                 )
             else:
