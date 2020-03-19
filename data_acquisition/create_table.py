@@ -19,6 +19,18 @@ drop_entirehome_listing = "DROP TABLE IF EXISTS EntireHomeListing"
 
 drop_occupation_dates = "DROP TABLE IF EXISTS OccupationDates"
 
+drop_popular_listing = "DROP TABLE IF EXISTS PopularListing"
+
+create_popular_listing = """
+CREATE TABLE IF NOT EXISTS PopularListing (
+listing_id INT,
+pop_score INT,
+
+PRIMARY KEY (listing_id),
+FOREIGN KEY (listing_id) REFERENCES Listing(listing_id)
+)
+"""
+
 create_occupation_dates = """
 CREATE TABLE IF NOT EXISTS OccupationDates (
 listing_id INT,
@@ -124,20 +136,22 @@ FOREIGN KEY (listing_id) REFERENCES Listing(listing_id)
 """
 
 queries = [
-    drop_occupation_dates,
-    drop_listing_bookmark,
-    drop_reviews,
-    drop_entirehome_listing,
-    drop_privateroom_listing,
-    drop_listing,
-    drop_host,
-    create_host,
-    create_listing,
-    create_privateroom_listing,
-    create_entirehome_listing,
-    create_reviews,
-    create_occupation_dates,
-    create_listing_bookmark
+    drop_popular_listing,
+    create_popular_listing,
+#    drop_occupation_dates,
+#    drop_listing_bookmark,
+#    drop_reviews,
+#    drop_entirehome_listing,
+#    drop_privateroom_listing,
+#    drop_listing,
+#    drop_host,
+#    create_host,
+#    create_listing,
+#    create_privateroom_listing,
+#    create_entirehome_listing,
+#    create_reviews,
+#    create_occupation_dates,
+#    create_listing_bookmark
 ]
 
 with connection:
