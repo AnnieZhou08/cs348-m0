@@ -1,5 +1,27 @@
 import pymysql
 
+def list_bookmark(conn, slack_user_id):
+	if slack_user_id is None or len(slack_user_id) <= 0:
+		return "Cannot retrieve bookmarks; Slack doesn't know your user id"
+	query = """
+	SELECT listing_id, comments FROM ListingBookmark
+	WHERE slack_user_id = %s;
+	"""
+	res = '*Your bookmarked listings:* \n'
+
+	with conn.cursor() as cur:
+		cur.execute(query, (slack_user_id))
+		result = cur.fetchall()
+		for bookmark in result:
+			listing_id = result[0].strip()
+			comment = result[1].strip()
+			res += listing_id + ': ' + comment + '\n'
+
+		print(res)
+
+	return res;
+		
+
 def add_bookmark(conn, slack_user_id, listing_id, comments):
     if slack_user_id is None or len(slack_user_id) <= 0:
         return "Cannot add bookmark; Slack doesn't know your user id"
