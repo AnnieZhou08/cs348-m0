@@ -16,6 +16,7 @@ from queries.price_neighborhoods import get_neighborhood_price
 from queries.avg_price import avg_price, avg_price_per_style
 from queries.suggest_hosts import suggest_hosts
 from queries.bookmark import add_bookmark, remove_bookmark, list_bookmark
+from queries.list_popular_listings import get_pop_listings
 
 # Parsing
 from module.parser import Parser, ParserResponse, Commands
@@ -111,6 +112,10 @@ class Events(APIView):
                             "- `remove bookmark` (Removes all bookmarks)\n"
                             "- `remove bookmark listingID=42`\n"
                             "\n\n*List Bookmarks*: `list bookmark`\n"
+                            "\n\n*Get list of popular listings*: `popular listings <numResults>` (Optionally restrict number of results)\n"
+                            "Usage:\n"
+                            "- `popular listings`\n"
+                            "- `popular listings 25`\n"
                         )
                     )
                 elif command == Commands.ListNeighbourhood:
@@ -186,6 +191,11 @@ class Events(APIView):
                             conn = connection,
                             slack_user_id = commandArgs['slackUserID'],
                         )
+                    )
+                elif command == Commands.PopularListings:
+                    Client.chat_postMessage(
+                        channel = channel,
+                        text = get_pop_listings(commandArgs['numResults'])
                     )
                 else:
                     logging.error('Invalid Command: {}\nSlack Message: {}'.format(command, slack_message))
