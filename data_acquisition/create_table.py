@@ -31,6 +31,10 @@ FOREIGN KEY (listing_id) REFERENCES Listing(listing_id)
 )
 """
 
+initialize_popular_listing = """
+INSERT IGNORE INTO PopularListing( select listing_id, 0 as pop_score from Listing)
+"""
+
 create_occupation_dates = """
 CREATE TABLE IF NOT EXISTS OccupationDates (
 listing_id INT,
@@ -137,9 +141,34 @@ FOREIGN KEY (listing_id) REFERENCES Listing(listing_id)
 )
 """
 
+create_inc_pop_trigger = """
+CREATE TRIGGER inc_popularity AFTER INSERT ON ListingBookmark
+FOR EACH ROW
+UPDATE PopularListing
+SET pop_score = (select count(*) 
+                 from ListingBookmark 
+                 where listing_id=NEW.listing_id 
+                 group by listing_id)
+WHERE listing_id = NEW.listing_id
+"""
+
+create_dec_pop_trigger = """
+CREATE TRIGGER dec_popularity AFTER DELETE ON ListingBookmark
+FOR EACH ROW
+UPDATE PopularListing
+SET pop_score = (select COALESCE(count(*) , 0)
+                 from ListingBookmark 
+                 where listing_id=OLD.listing_id 
+                 group by listing_id)
+WHERE listing_id = OLD.listing_id
+"""
+
 queries = [
     drop_popular_listing,
     create_popular_listing,
+    initialize_popular_listing,
+    create_inc_pop_trigger,
+    create_dec_pop_trigger,
 #    drop_occupation_dates,
     drop_listing_bookmark,
 #    drop_reviews,

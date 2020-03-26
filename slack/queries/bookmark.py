@@ -36,7 +36,7 @@ def add_bookmark(conn, slack_user_id, listing_id, comments):
     """
 
     if comments is None:
-	comments = ""
+        comments = ""
 
     query_update = """
     UPDATE ListingBookmark
@@ -58,16 +58,37 @@ def add_bookmark(conn, slack_user_id, listing_id, comments):
             return "Cannot add bookmark; this listing does not exist :("
         if 1062 == reason:
             # Message: Duplicate entry
-	    cur.execute(query_update, (comments, slack_user_id, listing_id))
-	    conn.commit()
+            with conn.cursor() as cur:
+                cur.execute(query_update, (comments, slack_user_id, listing_id))
+            conn.commit()
             return "Updated the comment of listing {} to {}".format(listing_id, comments)
         return "Cannot add bookmark"
     except e:
         return "Cannot add bookmark"
 
 
-def remove_bookmark(connection, slack_user_id, listing_id):
-    return "feature coming soon"
-
-def clear_bookmarks(connection, slack_user_id):
-    return "feature coming soon"
+def remove_bookmark(conn, slack_user_id, listing_id):
+    # If listing_id is None, remove all bookmarks for the user
+    if slack_user_id is None or len(slack_user_id) <= 0:
+        return "Cannot add bookmark; Slack doesn't know your user id"
+    try:
+        if listing_id is None:
+            query = """
+            DELETE FROM `ListingBookmark`
+            WHERE `slack_user_id` = %s
+            """
+            with conn.cursor() as cur:
+                cur.execute(query, (slack_user_id))
+            conn.commit()
+        else:
+            query = """
+            DELETE FROM `ListingBookmark`
+            WHERE `slack_user_id` = %s
+            AND   `listing_id` = %s
+            """
+            with conn.cursor() as cur:
+                cur.execute(query, (slack_user_id, listing_id))
+            conn.commit()
+        return "Bookmark(s) removed successfully"
+    except e:
+        return "Failed to remove bookmark(s)"
