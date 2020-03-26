@@ -16,6 +16,8 @@ class Commands(Enum):
     GetListings = 'get listings'
     AddBookmark = 'add bookmark'
     RemoveBookmark = 'remove bookmark'
+    ListBookmark = 'list bookmark'
+    PopularListings = 'popular listings'
 
 class ParserResponse:
     """
@@ -39,8 +41,11 @@ argumentName        string              Name of the group we want from regexMatc
 def argumentOrNone(regexMatch, argumentName):
     return regexMatch.group(argumentName) if regexMatch is not None else None
 
-def intOrNone (x):
-    return int(x) if x is not None else None
+def intOrNone(x):
+    try:
+        return int(x)
+    except:
+        return None
 
 class Parser:
     """
@@ -144,18 +149,18 @@ class Parser:
             elif command == Commands.AddBookmark:
                 slack_user_id = event_message.get('user', '')
                 listing_id = intOrNone(argumentOrNone(re.match(r"(.*)listingID=(?P<listingID>\d+)(.*)", message), 'listingID'))
+                comment = argumentOrNone(re.match(r"(.*)comment='(?P<comment>.*)'", message), 'comment')
                 return ParserResponse(
                     command = command,
                     commandArgs = {
                         'slackUserID': slack_user_id,
                         'listingID': listing_id,
+                        'comment': comment
                     }
                 )
             elif command == Commands.RemoveBookmark:
                 slack_user_id = event_message.get('user', '')
                 listing_id = intOrNone(argumentOrNone(re.match(r"(.*)listingID=(?P<listingID>\d+)(.*)", message), 'listingID'))
-                print("HI")
-                print(message)
                 return ParserResponse(
                     command = command,
                     commandArgs = {
@@ -163,6 +168,13 @@ class Parser:
                         'listingID': listing_id,
                     }
                 )
+            elif command == Commands.ListBookmark:
+                slack_user_id = event_message.get('user', '')
+                return ParserResponse(command = command, commandArgs = { 'slackUserID': slack_user_id })
+            elif command == Commands.PopularListings:
+                match = re.match(r'popular listings (\d+)', message)
+                numResults = match.group(1) if match is not None else 20
+                return ParserResponse(command = command, commandArgs = { 'numResults': numResults })
             else:
                 raise Exception()
 

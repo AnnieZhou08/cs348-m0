@@ -15,7 +15,8 @@ from queries.list_neighborhoods import get_neighborhoods
 from queries.price_neighborhoods import get_neighborhood_price
 from queries.avg_price import avg_price, avg_price_per_style
 from queries.suggest_hosts import suggest_hosts
-from queries.bookmark import add_bookmark, remove_bookmark
+from queries.bookmark import add_bookmark, remove_bookmark, list_bookmark
+from queries.list_popular_listings import get_pop_listings
 
 # Parsing
 from module.parser import Parser, ParserResponse, Commands
@@ -78,33 +79,43 @@ class Events(APIView):
                         channel = channel,
                         text = (
                             "Commands:\n"
-                            "`help` - Prints this!\n"
-                            "\n`list neighbourhood` - Returns a list of neighbourhoods\n"
-                            "\n`suggest host <neighbourhood=''> <numberOf=''>` - Returns suggested hosts (and optionally within a neighbourhood or the top N)\n"
+                            "*Help*: `help`\n"
+                            "\n\n*List neighbourhoods*: `list neighbourhood`\n"
+                            "\n\n*Suggest hosts*: `suggest host <neighbourhood=''> <numberOf=''>` (Optionally supply a neighbourhood or restrict the number of results)\n"
                             "Usage:\n"
-                            "- `suggest host`:\n"
-                            "- `suggest host neighbourhood='downtown'`:\n"
-                            "- `suggest host numberOf=5`:\n"
-                            "- `suggest host neighbourhood='downtown' numberOf=5`:\n"
-                            "\n`suggest date <begin='' end=''>` - Returns suggested dates\n"
+                            "- `suggest host`\n"
+                            "- `suggest host neighbourhood='downtown'`\n"
+                            "- `suggest host numberOf=5`\n"
+                            "- `suggest host neighbourhood='downtown' numberOf=5`\n"
+                            "\n\n*Suggest dates*: `suggest date <begin='' end=''>`\n"
                             "Usage:\n"
-                            "- `suggest date`:\n"
-                            "- `suggest date begin='2018-07-01' end='2018-08-01'`:\n"
-                            "\n`price date begin='' end='' <neighbourhood=''>` - Returns the average price within the date range (and optionally for one neighbourhood)\n"
+                            "- `suggest date`\n"
+                            "- `suggest date begin='2018-07-01' end='2018-08-01'`\n"
+                            "\n\n*Search average price given dates*: `price date begin='' end='' <neighbourhood=''>` (Optionally supply a neighbourhood)\n"
                             "Usage:\n"
-                            "- `price date begin='2018-07-01' end='2018-08-01'`:\n"
-                            "- `price date begin='2018-07-01' end='2018-08-01' neighbourhood='downtown'`:\n"
-                            "\n`price neighbourhood <neighbourhood>` - Returns the average price in different neighbourhoods (or optionally, from one neighbourhood)\n"
+                            "- `price date begin='2018-07-01' end='2018-08-01'`\n"
+                            "- `price date begin='2018-07-01' end='2018-08-01' neighbourhood='downtown'`\n"
+                            "\n\n*Search average price given neighbourhood*: `price neighbourhood <neighbourhood>` (Optionally restrict results to one neighbourhood)\n"
                             "Usage:\n"
-                            "- `price neighbourhood`"
+                            "- `price neighbourhood`\n"
                             "- `price neighbourhood 'downtown'`\n"
-                            "\n`price homestyle` - Returns the average price for different homestyles\n"
-                            "\n`get listings <neighbourhood, host, numPeople, startPrice, endPrice, numResults> ` - Returns listings (filtered by the optional parameters)\n"
+                            "\n\n*Search average price given homestyle*: `price homestyle`\n"
+                            "\n\n*Get list of Listings*: `get listings <neighbourhood, host, numPeople, startPrice, endPrice, numResults>` (All parameters optional)\n"
                             "Usage:\n"
                             "- `get listings neighbourhood='downtown' numPeople=3 endPrice=10000 startPrice=10`\n"
+                            "\n\n*Add Bookmark*: `add bookmark <listingID=''> <comment=''>` (Optionally add a comment)\n"
                             "Usage:\n"
                             "- `add bookmark listingID=42`\n"
-                            "- `remove bookmark [listingID=42]`\n"
+                            "- `add bookmark listingID=42 comment='this listing is great!'`\n"
+                            "\n\n*Remove Bookmark*: `remove bookmark <listingID=''>` (Optionally supply a listingID)\n"
+                            "Usage:\n"
+                            "- `remove bookmark` (Removes all bookmarks)\n"
+                            "- `remove bookmark listingID=42`\n"
+                            "\n\n*List Bookmarks*: `list bookmark`\n"
+                            "\n\n*Get list of popular listings*: `popular listings <numResults>` (Optionally restrict number of results)\n"
+                            "Usage:\n"
+                            "- `popular listings`\n"
+                            "- `popular listings 25`\n"
                         )
                     )
                 elif command == Commands.ListNeighbourhood:
@@ -161,7 +172,7 @@ class Events(APIView):
                             conn = connection,
                             slack_user_id = commandArgs['slackUserID'],
                             listing_id = commandArgs['listingID'],
-                            comments="" # TODO
+                            comments=commandArgs['comment']
                         )
                     )
                 elif command == Commands.RemoveBookmark:
@@ -172,6 +183,19 @@ class Events(APIView):
                             slack_user_id = commandArgs['slackUserID'],
                             listing_id = commandArgs['listingID']
                         )
+                    )
+                elif command == Commands.ListBookmark:
+                    Client.chat_postMessage(
+                        channel = channel,
+                        text = list_bookmark(
+                            conn = connection,
+                            slack_user_id = commandArgs['slackUserID'],
+                        )
+                    )
+                elif command == Commands.PopularListings:
+                    Client.chat_postMessage(
+                        channel = channel,
+                        text = get_pop_listings(commandArgs['numResults'])
                     )
                 else:
                     logging.error('Invalid Command: {}\nSlack Message: {}'.format(command, slack_message))
