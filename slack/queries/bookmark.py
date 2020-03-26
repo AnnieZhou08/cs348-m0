@@ -13,14 +13,14 @@ def list_bookmark(conn, slack_user_id):
 		cur.execute(query, (slack_user_id))
 		result = cur.fetchall()
 		for bookmark in result:
-			listing_id = result[0].strip()
-			comment = result[1].strip()
-			res += listing_id + ': ' + comment + '\n'
+			listing_id = bookmark[0]
+			comment = bookmark[1].strip()
+			res += '{} : {}\n'.format(listing_id, comment)
 
-		print(res)
+		# print(res)
 
 	return res;
-		
+
 
 def add_bookmark(conn, slack_user_id, listing_id, comments):
     if slack_user_id is None or len(slack_user_id) <= 0:

@@ -52,7 +52,7 @@ FROM Listing
             query = query + "WHERE price <= {}".format(endPrice)
             cond_exist = True
 
-    print(query)
+    # print(query)
     output = '*Suggested Listings:* \n'
     with connection:
         cur = connection.cursor()
@@ -81,13 +81,13 @@ FROM Listing
 *accommodates:* {}\n
 *price:* {}\n
 *cleaning fee:* {}\n
-*for more info:* {}\n\n	
+*for more info:* {}\n\n
 """.format(listing_id, listing_name, descrip, nbrhd, host_id, accommodates, price, clean_fee, listing_url)
             output += entry
 
-        print(output)
+        # print(output)
 
     return output
 
 
-get_listings(numPeople=2, startPrice=10, endPrice=1000, nbrhd='Potrero Hill')
+# get_listings(numPeople=2, startPrice=10, endPrice=1000, nbrhd='Potrero Hill')

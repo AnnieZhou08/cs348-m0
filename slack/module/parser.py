@@ -16,6 +16,7 @@ class Commands(Enum):
     GetListings = 'get listings'
     AddBookmark = 'add bookmark'
     RemoveBookmark = 'remove bookmark'
+    ListBookmark = 'list bookmark'
 
 class ParserResponse:
     """
@@ -144,18 +145,18 @@ class Parser:
             elif command == Commands.AddBookmark:
                 slack_user_id = event_message.get('user', '')
                 listing_id = intOrNone(argumentOrNone(re.match(r"(.*)listingID=(?P<listingID>\d+)(.*)", message), 'listingID'))
+                comment = argumentOrNone(re.match(r"(.*)comment='(?P<comment>.*)'", message), 'comment')
                 return ParserResponse(
                     command = command,
                     commandArgs = {
                         'slackUserID': slack_user_id,
                         'listingID': listing_id,
+                        'comment': comment
                     }
                 )
             elif command == Commands.RemoveBookmark:
                 slack_user_id = event_message.get('user', '')
                 listing_id = intOrNone(argumentOrNone(re.match(r"(.*)listingID=(?P<listingID>\d+)(.*)", message), 'listingID'))
-                print("HI")
-                print(message)
                 return ParserResponse(
                     command = command,
                     commandArgs = {
@@ -163,6 +164,9 @@ class Parser:
                         'listingID': listing_id,
                     }
                 )
+            elif command == Commands.ListBookmark:
+                slack_user_id = event_message.get('user', '')
+                return ParserResponse(command = command, commandArgs = { 'slackUserID': slack_user_id })
             else:
                 raise Exception()
 
