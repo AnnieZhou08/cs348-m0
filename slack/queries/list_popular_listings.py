@@ -9,7 +9,7 @@ def get_pop_listings(numResult = 20):
 	res = '*Listings and Popularity Score:* \n'
 	with connection:
 		cur = connection.cursor()
-		cur.execute("SELECT * FROM PopularListing ORDER BY pop_score LIMIT {}".format(numResult))
+		cur.execute("SELECT * FROM PopularListing ORDER BY pop_score DESC LIMIT {}".format(numResult))
 		result = cur.fetchall()
 		for lsting in result:
 			listing_id = lsting[0]
