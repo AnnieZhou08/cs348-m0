@@ -38,12 +38,12 @@ INSERT IGNORE INTO PopularListing( select listing_id, 0 as pop_score from Listin
 create_occupation_dates = """
 CREATE TABLE IF NOT EXISTS OccupationDates (
 listing_id INT,
-date VARCHAR(50),
+date DATE,
 available BOOLEAN,
 price INT,
 adjusted_price INT,
 
-PRIMARY KEY (listing_id, date),
+PRIMARY KEY (date, listing_id),
 FOREIGN KEY (listing_id) REFERENCES Listing(listing_id)
 )
 """
@@ -63,14 +63,12 @@ FOREIGN KEY (listing_id) REFERENCES Listing(listing_id)
 
 create_listing_bookmark = """
 CREATE TABLE IF NOT EXISTS ListingBookmark (
-bookmark_id INT NOT NULL AUTO_INCREMENT,
-listing_id INT,
-slack_user_id VARCHAR(50),
+listing_id INT NOT NULL,
+slack_user_id VARCHAR(50) NOT NULL,
 comments VARCHAR(1000),
 
-PRIMARY KEY (bookmark_id),
-FOREIGN KEY (listing_id) REFERENCES Listing(listing_id),
-UNIQUE KEY(slack_user_id, listing_id)
+PRIMARY KEY (slack_user_id, listing_id),
+FOREIGN KEY (listing_id) REFERENCES Listing(listing_id)
 )"""
 
 create_host = """
@@ -87,7 +85,9 @@ host_total_listings_count INT,
 host_neighbourhood VARCHAR(100),
 host_identity_verified BOOLEAN,
 
-PRIMARY KEY (host_id)
+PRIMARY KEY (host_id),
+INDEX (host_location),
+INDEX (host_neighbourhood)
 )
 """
 
@@ -121,7 +121,9 @@ security_deposit INT,
 cleaning_fee INT,
 
 PRIMARY KEY (listing_id),
-FOREIGN KEY (host_id) REFERENCES Host(host_id)
+FOREIGN KEY (host_id) REFERENCES Host(host_id),
+INDEX (neighbourhood),
+INDEX (host_id)
 )
 """
 
