@@ -15,8 +15,7 @@ SELECT listing_id,
 host_id, listing_url, name, description, neighbourhood, accommodates,
 price, cleaning_fee
 FROM Listing
-LIMIT {}
-""".format(numResults)
+"""
     cond_exist = False
     if host is not None:
         if cond_exist is True:
@@ -52,7 +51,7 @@ LIMIT {}
         else:
             query = query + "WHERE price <= {}".format(endPrice)
             cond_exist = True
-
+    query += " LIMIT {}".format(numResults)
     # print(query)
     output = '*Suggested Listings:* \n'
     with connection:
