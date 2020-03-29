@@ -8,14 +8,15 @@ def get_listings(host=None, nbrhd=None, numPeople=None, startPrice=None, endPric
                                  db='cs348m0')
 
     if numResults is None:
-        numResults = 20
+        numResults = 5
 
     query = """
 SELECT listing_id,
 host_id, listing_url, name, description, neighbourhood, accommodates,
 price, cleaning_fee
 FROM Listing
-"""
+LIMIT {}
+""".format(numResults)
     cond_exist = False
     if host is not None:
         if cond_exist is True:
@@ -58,11 +59,7 @@ FROM Listing
         cur = connection.cursor()
         cur.execute(query)
         result = cur.fetchall()
-        counter = 0
         for res in result:
-            counter += 1
-            if counter >= numResults:
-                break
             listing_id = res[0]
             host_id = res[1]
             listing_url = res[2]
