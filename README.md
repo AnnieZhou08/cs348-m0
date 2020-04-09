@@ -63,7 +63,7 @@ suggest host neighbourhood='downtown'
 suggest host numberOf=5
 suggest host neighbourhood='downtown' numberOf=5
 ```      
-![](feature_screenshots/SuggestHosts.png)
+![](feature_screenshots/SuggestHosts.png, width="40%")
 
 
 `price date begin=' ' end=' ' <neighbourhood=''>`
