@@ -63,7 +63,7 @@ suggest host neighbourhood='downtown'
 suggest host numberOf=5
 suggest host neighbourhood='downtown' numberOf=5
 ```      
-![](feature_screenshots/SuggestHosts.png, width="40%")
+<img src="feature_screenshots/SuggestHosts.png" width="80%">
 
 
 `price date begin=' ' end=' ' <neighbourhood=''>`
@@ -72,7 +72,7 @@ Usage:
 ```
 price date begin='2018-07-01' end='2018-08-01' neighbourhood='downtown'
 ```
-![](feature_screenshots/Price3.png)
+<img src="feature_screenshots/Price3.png" width="55%">
 
 
 `price neighbourhood <neighbourhood>` 
@@ -82,9 +82,9 @@ Usage:
 price neighbourhood
 price neighbourhood 'downtown'
 ```
-![](feature_screenshots/Price2.png)
+<img src="feature_screenshots/Price2.png" width="90%">
+<img src="feature_screenshots/Price1.png" width="55%">
 
-![](feature_screenshots/Price1.png)
 
 `popular listings <num>`
 Returns a list of <num> listings and their popularity score, ordered by their popularity score. File: `/slack/queries/list_popular_listings.py`
