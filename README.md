@@ -93,6 +93,7 @@ Usage:
 popular listings
 popular listings 5
 ```
+<img src="feature_screenshots/popular_listings.jpg" width="35%">
       
 `list bookmark`
 Returns all of the user's *own* bookmarks. The user is the one who triggered the command. File: `/slack/queries/bookmark.py`
@@ -100,6 +101,7 @@ Usage:
 ```
 list bookmark
 ```
+<img src="feature_screenshots/list_bookmark.jpg" width="45%">
 
 `add bookmark listingID=' ' <comment=' '>`
 Adds the listingID to the user's collection of bookmarks, along with an optional comment attached to this bookmark. File: `/slack/queries/bookmark.py`
@@ -108,6 +110,7 @@ Usage:
 add bookmark listingID=123
 add bookmark listingID=123 comment='very affordable!'
 ```
+<img src="feature_screenshots/add_bookmark.jpg" width="40%">
 
 `remove bookmark <listingID=' '>`
 Removes the specified listingID bookmark from user's *own* collection of bookmarks. If no listingID is specified, the entire collection is removed. File: `/slack/queries/bookmark.py`
@@ -116,6 +119,7 @@ Usage:
 remove bookmark listingID=123
 remove bookmark
 ```
+<img src="feature_screenshots/remove_bookmark.jpg" width="40%">
 
 To implement all of these, we also needed to create a parser for user commands. File: `/slack/module/parser.py`
 
