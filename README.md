@@ -43,11 +43,12 @@ Prints help document. File: `/slack/events/views.py`
 `get listings`
 Returns a list of listings. File: `/slack/queries/get_listings.py`
 Usage:
-      `get listings`
-      `get listings neighbourhood='downtown'`
-      `get listings numberOf=5`
-      `get listings neighbourhood='downtown' numberOf=5`
-      
+```
+get listings
+get listings neighbourhood='downtown'
+get listings numberOf=5
+get listings neighbourhood='downtown' numberOf=5
+```      
 ![](feature_screenshots/GetListings.png)
 
 `list neighborhood`
@@ -56,49 +57,66 @@ Returns a list of neighborhoods. File: `/slack/queries/list_neighborhoods.py`
 `suggest host <neighbourhood=''> <numberOf=''>`
 Returns suggested hosts (and optionally within a neighbourhood or the top N). File: `/slack/queries/suggest_hosts.py`
 Usage:
-
-      `suggest host`
-      `suggest host neighbourhood='downtown'`
-      `suggest host numberOf=5`
-      `suggest host neighbourhood='downtown' numberOf=5`
-      
+```
+suggest host
+suggest host neighbourhood='downtown'
+suggest host numberOf=5
+suggest host neighbourhood='downtown' numberOf=5
+```      
 ![](feature_screenshots/SuggestHosts.png)
 
 
 `price date begin=' ' end=' ' <neighbourhood=''>`
 Returns the average price within the date range (and optionally for one neighbourhood). File: `/slack/queries/avg_price.py`
 Usage: 
-      
-      `price date begin='2018-07-01' end='2018-08-01' neighbourhood='downtown'`
+```
+price date begin='2018-07-01' end='2018-08-01' neighbourhood='downtown'
+```
 ![](feature_screenshots/Price3.png)
 
 
 `price neighbourhood <neighbourhood>` 
 Returns the average price in different neighbourhoods (or optionally, from one neighbourhood). File: `/slack/queries/price_neighborhoods.py`
 Usage: 
-
-      `price neighbourhood`   
-      `price neighbourhood 'downtown'`
-      
+```
+price neighbourhood
+price neighbourhood 'downtown'
+```
 ![](feature_screenshots/Price2.png)
 
 ![](feature_screenshots/Price1.png)
 
+`popular listings <num>`
+Returns a list of <num> listings and their popularity score, ordered by their popularity score. File: `/slack/queries/list_popular_listings.py`
+Usage:
+```
+popular listings
+popular listings 5
+```
+      
+`list bookmark`
+Returns all of the user's *own* bookmarks. The user is the one who triggered the command. File: `/slack/queries/bookmark.py`
+Usage:
+```
+list bookmark
+```
 
-`price homestyle`
-Returns the average price for different homestyles. File: `/slack/queries/avg_price.py`
+`add bookmark listingID=' ' <comment=' '>`
+Adds the listingID to the user's collection of bookmarks, along with an optional comment attached to this bookmark. File: `/slack/queries/bookmark.py`
+Usage:
+```
+add bookmark listingID=123
+add bookmark listingID=123 comment='very affordable!'
+```
 
+`remove bookmark <listingID=' '>`
+Removes the specified listingID bookmark from user's *own* collection of bookmarks. If no listingID is specified, the entire collection is removed. File: `/slack/queries/bookmark.py`
+Usage:
+```
+remove bookmark listingID=123
+remove bookmark
+```
 
 To implement all of these, we also needed to create a parser for user commands. File: `/slack/module/parser.py`
-
-## Features left:
-`suggest date <begin='' end=''>`
-Returns suggested dates.
-Usage: 
-
-      `suggest date`
-      `suggest date begin='2018-07-01' end='2018-08-01'`
-
-
 
 Refer to tutorial: https://medium.com/freehunch/how-to-build-a-slack-bot-with-python-using-slack-events-api-django-under-20-minute-code-included-269c3a9bf64e
