@@ -6,7 +6,7 @@ def get_neighborhoods():
 				     password='passw0rd',
 				     db='cs348m0')
 
-	res = '*Neighbhoods:* \n'
+	res = '*Neighbourhoods:* \n'
 	with connection:
 		cur = connection.cursor()
 		cur.execute("SELECT neighbourhood FROM Listing GROUP BY neighbourhood")
