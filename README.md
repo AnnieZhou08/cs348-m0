@@ -51,8 +51,8 @@ get listings neighbourhood='downtown' numberOf=5
 ```      
 ![](feature_screenshots/GetListings.png)
 
-`list neighborhood`
-Returns a list of neighborhoods. File: `/slack/queries/list_neighborhoods.py`
+`list neighbourhood`
+Returns a list of neighbourhoods. File: `/slack/queries/list_neighborhoods.py`
 
 `suggest host <neighbourhood=''> <numberOf=''>`
 Returns suggested hosts (and optionally within a neighbourhood or the top N). File: `/slack/queries/suggest_hosts.py`
